@@ -3,10 +3,13 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  redirect,
 } from 'react-router';
 import type { Route } from './+types/root';
 
 import appStylesHref from './app.css?url';
+
+import { createEmptyContact } from './data';
 
 export function HydrateFallback() {
   return (
@@ -15,6 +18,11 @@ export function HydrateFallback() {
       <p>Loading, please wait...</p>
     </div>
   );
+}
+
+export async function action() {
+  const contact = await createEmptyContact();
+  return redirect(`/contacts/${contact.id}/edit`);
 }
 
 export default function App() {
@@ -30,6 +38,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>My React Router App</title>
         <link rel="stylesheet" href={appStylesHref} />
       </head>
       <body>
